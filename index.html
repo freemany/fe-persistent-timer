@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        #timer {
+            border: 2px solid black;
+            margin: 0 auto;
+            width: 80px;
+            height: 100px;
+            border-radius: 10px;
+            color: blue;
+            font-size: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>FE persistent Timer</h1>
+    <div id="timer">
+        <span>0</span>
+    </div>
+    <script>
+        const storeKey = '__TIMER__';
+        const render = (number) => {
+            $('#timer>span').text(number);
+            localStorage.setItem(storeKey, number);
+        }
+        const setTimer = (timeout) => {
+            render(timeout);
+            let c = timeout, timer;
+            // timer = setInterval(() => {
+            //    c--;
+            //    if (c < 0) {
+            //     console.log('Time is up');
+            //     clearInterval(timer);
+            //     localStorage.removeItem(storeKey);
+            //     return;
+            //    }
+            //    render(c);
+            // }, 1000);
+
+            doTimeout(timeout, timer);
+        }
+
+        function doTimeout(timeout) {
+            if (timeout === 0) {
+                clearTimeout(timer);
+                return;
+            }
+            timer = setTimeout(() => {
+                const next = timeout - 1;
+                render(next);
+                doTimeout(next, timer);
+            }, 1000);
+        }
+
+        const remaining = Number(localStorage.getItem(storeKey));
+        if (remaining > 1) {  
+            setTimer(remaining - 1);
+        }
+    </script>
+</body>
+</html>
